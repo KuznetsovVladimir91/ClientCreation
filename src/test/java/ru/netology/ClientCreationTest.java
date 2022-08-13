@@ -55,5 +55,32 @@ public class ClientCreationTest {
 
     }
 
+    @Test
+    void shouldGetNotificationIfWrongLogin() {
+
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+        var registeredUser = DataGenerator.getRegisteredUser("active");
+        var wrongLogin = DataGenerator.getLogin();
+        $("[data-test-id=login] input").setValue(wrongLogin);
+        $("[data-test-id=password] input").setValue(registeredUser.getPassword());
+        $("[data-test-id=action-login]").click();
+        $("[data-test-id=error-notification]").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
+
+    }
+
+    @Test
+    void shouldGetNotificationIfWrongPassword() {
+
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+        var registeredUser = DataGenerator.getRegisteredUser("active");
+        var wrongPassword = DataGenerator.getPassword();
+        $("[data-test-id=login] input").setValue(registeredUser.getLogin());
+        $("[data-test-id=password] input").setValue(wrongPassword);
+        $("[data-test-id=action-login]").click();
+        $("[data-test-id=error-notification]").shouldBe(visible).shouldHave(text("Неверно указан логин или пароль"));
+
+    }
 
 }
